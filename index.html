@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Chat</title>
+<style>
+
+body{
+background:#0f172a;
+color:white;
+font-family:Arial;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.app{
+width:400px;
+background:#1e293b;
+padding:20px;
+border-radius:10px;
+display:flex;
+flex-direction:column;
+height:500px;
+}
+
+.chat{
+flex:1;
+overflow:auto;
+background:#0f172a;
+padding:10px;
+border-radius:6px;
+margin-bottom:10px;
+}
+
+.msg{
+padding:8px;
+margin:6px 0;
+border-radius:6px;
+}
+
+.user{background:#2563eb;}
+.ai{background:#334155;}
+
+.input{
+display:flex;
+gap:5px;
+}
+
+input{
+flex:1;
+padding:10px;
+border:none;
+border-radius:6px;
+background:#334155;
+color:white;
+}
+
+button{
+padding:10px;
+border:none;
+border-radius:6px;
+background:#22c55e;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div id="chat" class="chat"></div>
+
+<div class="input">
+<input id="prompt" placeholder="Ask AI">
+<button onclick="ask()">Send</button>
+</div>
+
+</div>
+
+<script>
+
+async function ask(){
+
+const input=document.getElementById("prompt");
+const text=input.value;
+
+if(!text) return;
+
+add(text,"user");
+input.value="";
+
+const res=await fetch("/api/chat",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+message:text
+})
+});
+
+const data=await res.json();
+
+add(data.reply,"ai");
+
+}
+
+function add(text,type){
+
+const div=document.createElement("div");
+div.className="msg "+type;
+div.innerText=text;
+
+document.getElementById("chat").appendChild(div);
+
+}
+
+</script>
+
+</body>
+</html>
