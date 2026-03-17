@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
 
-const API_KEY =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;
+const API_KEY = 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;
 
 try {
 
